@@ -95,28 +95,50 @@ function Update(props){
     }
  }
         
-
+ const [alert,setalert]=React.useState(' ')
+  
+ var pattern = new RegExp(/^[0-9\b]+$/);
     
 
     const addNewRecord=async(sno)=>{
-
-  
-    const body={sno:sno,name:name,email:email,phone:phone,degree:degree}
-      const result=await postData('student/updatedata',body)
-    
-      if(result)
+      if(name===' ' || email===' ' || phone===' ' || photo.file===' '|| degree===' ')
       {
-        props.history.replace({pathname:'/Studentlist'})
-        setemail(' ')
-        setname(' ')
-        setphoto(' ')
-        setphone(' ')
-        setdegree(' ')
+        setalert('* fields are mandatory..')
+        setname(props.history.location.details[0].name)
+        setemail(props.history.location.details[0].email)
+        setphone(props.history.location.details[0].phone)
+        setdegree(props.history.location.details[0].degree)
+        setMessage(' ')
+      }
+       else if(!pattern.test(phone) || phone.length!==10 )
+      {
+        setalert('Please enter a valid mobile number')
+        setname(props.history.location.details[0].name)
+        setemail(props.history.location.details[0].email)
+        setphone(props.history.location.details[0].phone)
+        setdegree(props.history.location.details[0].degree)
+        setMessage(' ')
       }
       else
       {
-        setMessage("Updation Failed")
-      }
+  
+            const body={sno:sno,name:name,email:email,phone:phone,degree:degree}
+              const result=await postData('student/updatedata',body)
+            
+              if(result)
+              {
+                props.history.replace({pathname:'/Studentlist'})
+                setemail(' ')
+                setname(' ')
+                setphoto(' ')
+                setphone(' ')
+                setdegree(' ')
+              }
+              else
+              {
+                setMessage("Updation Failed")
+              }
+    }
     }
 
 useEffect(()=>{
@@ -166,7 +188,7 @@ useEffect(()=>{
       </Grid>
             <Grid item xs={12}>
             <TextField
-        id="outlined-dense"
+        id="studentname"
         label="Name"
         className={clsx(classes.textField, classes.dense)}
         margin="dense"
@@ -179,7 +201,7 @@ useEffect(()=>{
 
      <Grid item xs={12}>
             <TextField
-        id="outlined-dense"
+        id="studentemail"
         label="Email"
         className={clsx(classes.textField, classes.dense)}
         margin="dense"
@@ -193,7 +215,7 @@ useEffect(()=>{
 
      <Grid item xs={12}>
             <TextField
-        id="outlined-dense"
+        id="studentmobile"
         label="Mobile"
         className={clsx(classes.textField, classes.dense)}
         margin="dense"
@@ -208,7 +230,7 @@ useEffect(()=>{
      
       <Grid item xs={12}>
             <TextField
-        id="outlined-dense"
+        id="studentdegree"
         label="Degree"
         className={clsx(classes.textField, classes.dense)}
         margin="dense"
@@ -235,6 +257,8 @@ useEffect(()=>{
      </Grid>
      </Grid>
         </Paper>
+        <Typography style={{color:'red'}}>{alert}</Typography>
+        <br/>
         <Typography>{message}</Typography>
     </Container>
             
