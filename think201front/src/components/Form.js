@@ -67,17 +67,45 @@ function Form(props){
     props.history.replace({pathname:'/Studentlist'})
   }
 
+  const [alert,setalert]=React.useState(' ')
+  
+  var pattern = new RegExp(/^[0-9\b]+$/);
 
     const addNewRecord=async()=>{
-      let formData = new FormData()
-      formData.append('name',name)
-      formData.append('email',email)
-      formData.append('phone',phone)
-      formData.append('photo',photo.file)
-      formData.append('degree',degree)
-      const config={headers:{'content-type':'multipart/form-data'}}
-      const result=await postDataAndImage('student/studentdata',formData,config)
-    
+     
+
+      if(name===' ' || email===' ' || phone===' ' || photo.file===' ' || degree===' ')
+      {
+        setalert('* fields are mandatory..')
+        setemail('')
+        setname('')
+        setphoto('')
+        setphone(' ')
+        setdegree(' ')
+        setMessage(' ')
+      }
+      else if(!pattern.test(phone)  || phone.length!==10)
+      {
+        setalert('Please enter a valid mobile number')
+        setemail('')
+        setname('')
+        setphoto('')
+        setphone(' ')
+        setdegree(' ')
+        setMessage(' ')
+       
+      }
+      else 
+      {
+        let formData = new FormData()
+        formData.append('name',name)
+        formData.append('email',email)
+        formData.append('phone',phone)
+        formData.append('photo',photo.file)
+        formData.append('degree',degree)
+        const config={headers:{'content-type':'multipart/form-data'}}
+        const result=await postDataAndImage('student/studentdata',formData,config)
+        
       if(result)
       {
         setMessage("Record submitted..")
@@ -86,11 +114,15 @@ function Form(props){
         setphoto('')
         setphone(' ')
         setdegree(' ')
+        setalert( ' ')
       }
       else
       {
         setMessage("Submission Failed..")
+        setalert(' ')
       }
+      }
+    
     }
 
     
@@ -104,7 +136,7 @@ function Form(props){
         <Grid container>
             <Grid item xs={12}>
             <TextField
-        id="outlined-dense"
+        id="studentname"
         label="Name"
         required
         className={clsx(classes.textField, classes.dense)}
@@ -118,11 +150,12 @@ function Form(props){
 
      <Grid item xs={12}>
             <TextField
-        id="outlined-dense"
+        id="studentemail"
         label="Email"
         className={clsx(classes.textField, classes.dense)}
         margin="dense"
         required
+        type="email"
         value={email}
         variant="outlined"
         onChange={(event)=>setemail(event.target.value)}
@@ -132,11 +165,12 @@ function Form(props){
 
      <Grid item xs={12}>
      <TextField
-        id="outlined-dense"
+        id="studentmobile"
         label="Mobile"
         className={clsx(classes.textField, classes.dense)}
         margin="dense"
         required
+      
         value={phone}
         variant="outlined"
         onChange={(event)=>setphone(event.target.value)}
@@ -152,6 +186,7 @@ function Form(props){
         id="contained-button-file"
         multiple
         type="file"
+        required
         onChange={(event)=>setphoto({icon:URL.createObjectURL(event.target.files[0]),file:event.target.files[0]})}
       />
       <label htmlFor="contained-button-file">
@@ -166,12 +201,14 @@ function Form(props){
       </Grid>
       <Grid item xs={12}>
             <TextField
-        id="outlined-dense"
+        id="studentdegree"
         label="Degree"
         className={clsx(classes.textField, classes.dense)}
+       
         margin="dense"
-        value={degree}
         required
+        value={degree}
+       
         variant="outlined"
         onChange={(event)=>setdegree(event.target.value)}
         fullWidth
@@ -185,10 +222,11 @@ function Form(props){
      </Grid>
      </Grid>
         </Paper>
-
+        <Typography style={{color:'red'}}>{alert}</Typography>
+        <br/>
         <Typography>{message}</Typography>
 
-        <Button color="secondary" variant="contained" style={{width:'100%',marginTop:'20%'}} onClick={studentList}>Show Student</Button>
+        <Button color="secondary" variant="contained" style={{width:'100%',marginTop:'15%'}} onClick={studentList}>Show Student</Button>
     </Container>
  
 </div>
