@@ -54,8 +54,8 @@ function Form(props){
     const [name,setname]=React.useState('');
     const [email,setemail]=React.useState('');
     const [photo,setphoto]=React.useState({icon:'',file:''});
-    const [phone,setphone]=React.useState(' ');
-    const [degree,setdegree]=React.useState(' ');
+    const [phone,setphone]=React.useState('');
+    const [degree,setdegree]=React.useState('');
     const[message,setMessage]=React.useState('')
 
     const goBack=()=>{
@@ -74,14 +74,14 @@ function Form(props){
     const addNewRecord=async()=>{
      
 
-      if(name===' ' || email===' ' || phone===' ' || photo.file===' ' || degree===' ')
+      if(name==='' || email==='' || phone==='' || photo.file==='' || degree==='')
       {
         setalert('* fields are mandatory..')
         setemail('')
         setname('')
         setphoto('')
-        setphone(' ')
-        setdegree(' ')
+        setphone('')
+        setdegree('')
         setMessage(' ')
       }
       else if(!pattern.test(phone)  || phone.length!==10)
@@ -90,8 +90,8 @@ function Form(props){
         setemail('')
         setname('')
         setphoto('')
-        setphone(' ')
-        setdegree(' ')
+        setphone('')
+        setdegree('')
         setMessage(' ')
        
       }
