@@ -68,11 +68,11 @@ const useStyles = makeStyles(theme=>({
 function Update(props){
    const classes=useStyles();
 
-   const [name,setname]=React.useState(' ');
+   const [name,setname]=React.useState('');
     const [email,setemail]=React.useState('');
     const [photo,setphoto]=React.useState({icon:'',file:''});
-    const [phone,setphone]=React.useState(' ');
-    const [degree,setdegree]=React.useState(' ');
+    const [phone,setphone]=React.useState('');
+    const [degree,setdegree]=React.useState('');
     const[message,setMessage]=React.useState('')
 
     
@@ -95,32 +95,12 @@ function Update(props){
     }
  }
         
- const [alert,setalert]=React.useState(' ')
-  
- var pattern = new RegExp(/^[0-9\b]+$/);
+ 
     
 
     const addNewRecord=async(sno)=>{
-      if(name===' ' || email===' ' || phone===' ' || photo.file===' '|| degree===' ')
-      {
-        setalert('* fields are mandatory..')
-        setname(props.history.location.details[0].name)
-        setemail(props.history.location.details[0].email)
-        setphone(props.history.location.details[0].phone)
-        setdegree(props.history.location.details[0].degree)
-        setMessage(' ')
-      }
-       else if(!pattern.test(phone) || phone.length!==10 )
-      {
-        setalert('Please enter a valid mobile number')
-        setname(props.history.location.details[0].name)
-        setemail(props.history.location.details[0].email)
-        setphone(props.history.location.details[0].phone)
-        setdegree(props.history.location.details[0].degree)
-        setMessage(' ')
-      }
-      else
-      {
+
+     
   
             const body={sno:sno,name:name,email:email,phone:phone,degree:degree}
               const result=await postData('student/updatedata',body)
@@ -138,7 +118,7 @@ function Update(props){
               {
                 setMessage("Updation Failed")
               }
-    }
+    
     }
 
 useEffect(()=>{
@@ -257,8 +237,7 @@ useEffect(()=>{
      </Grid>
      </Grid>
         </Paper>
-        <Typography style={{color:'red'}}>{alert}</Typography>
-        <br/>
+       
         <Typography>{message}</Typography>
     </Container>
             
